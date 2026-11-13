@@ -1,0 +1,60 @@
+<?php
+
+namespace Updater\Controller;
+
+use App\Controller\App;
+use ArrayObject;
+
+class Updater extends App {
+
+    protected function before() {
+
+        if (!$this->helper('acl')->isSuperAdmin()) {
+            return $this->stop(401);
+        }
+
+        $this->helper('session')->close();
+    }
+
+    public function index() {
+
+        $meta = $this->helper('updater')->getLatestReleaseInfo();
+
+        $meta['isNewVersionAvailable'] = \version_compare($meta['version'], APP_VERSION, '>');
+
+        return $this->render('updater:views/index.php', \compact('meta'));
+    }
+
+    public function update() {
+
+        $version = $this->param('version', 'master');
+        $target = $this->helper('license')->isProprietary() ? 'pro' : 'core';
+
+        if (!\in_array($target, ['core', 'pro'])) {
+            return $this->stop(400, 'Invalid target');
+        }
+
+        if (!\in_array($version, ['master', 'develop'])) {
+            return $this->stop(400, 'Invalid version');
+        }
+
+        $user = $this->helper('auth')->getUser();
+
+        $this->app->module('system')->log(
+            "Update initiated by {$user['user']} to {$version} [{$target}]",
+            'updater',
+            'info',
+            [
+                'user' => $user['user'],
+                'user_id' => $user['_id'],
+                'version' => $version,
+                'target' => $target,
+                'from_version' => APP_VERSION,
+            ]
+        );
+
+        $this->helper('updater')->update($version, $target);
+
+        return ['message' => 'Update successful!'];
+    }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "amordad-cockpit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Amordad Architecture Studio - Cockpit CMS site",
+  "scripts": {
+    "start": "php -S localhost:8000 router.php",
+    "dev": "php -S localhost:8000 router.php",
+    "check": "php check.php",
+    "lint": "find . -type f -name '*.php' ! -path './.git*' ! -path './vorud/storage*' ! -path './vorud/lib*' ! -path './vorud/modules*' ! -path './graphify-out*' -print0 | xargs -0 -n 1 php -l",
+    "build": "./build-deploy-zip.sh --no-upload",
+    "build:code": "./build-deploy-zip.sh --code-only --no-upload",
+    "deploy": "./build-deploy-zip.sh",
+    "deploy:code": "./build-deploy-zip.sh --code-only",
+    "pull": "./pull-server-backup.sh",
+    "graph:update": "graphify update ."
+  },
+  "keywords": [
+    "amordad",
+    "cockpit-cms",
+    "php"
+  ],
+  "author": "Amordad",
+  "license": "UNLICENSED"
+}

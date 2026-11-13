@@ -1,0 +1,2 @@
+# Databases are never served over HTTP
+Require all denied

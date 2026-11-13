@@ -1,0 +1,72 @@
+Options -Indexes
+RewriteEngine On
+
+# Canonical origin: force HTTPS and drop "www." (production host only)
+RewriteCond %{HTTP_HOST} ^(www\.)?amordad\.backends\.ir$ [NC]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !^https$ [NC]
+RewriteRule ^ https://amordad.backends.ir%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTP_HOST} ^www\.amordad\.backends\.ir$ [NC]
+RewriteRule ^ https://amordad.backends.ir%{REQUEST_URI} [R=301,L]
+
+# Old production domain → new domain (keeps existing links and search results working)
+RewriteCond %{HTTP_HOST} ^(www\.)?amordad\.nazeriland\.ir$ [NC]
+RewriteRule ^ https://amordad.backends.ir%{REQUEST_URI} [R=301,L]
+
+# Never serve archives, databases, scripts, docs or logs (anywhere in the tree)
+<FilesMatch "(\.(zip|tar|gz|tgz|sql|sqlite|sqlite-wal|sqlite-shm|sqlite-journal|db|bak|sh|md|log|env)|^error_log)$">
+    Require all denied
+</FilesMatch>
+
+# Don't rewrite Cockpit admin or real files
+RewriteCond %{REQUEST_URI} ^/vorud [NC]
+RewriteRule ^ - [L]
+
+# Backward compatibility for any cached upload URLs
+RewriteRule ^cockpit/storage/uploads/(.*)$ /vorud/storage/uploads/$1 [L]
+
+# The old /cockpit admin no longer exists
+RewriteRule ^cockpit(/|$) - [R=404,L]
+
+# Internal PHP includes, tools, and docs are not public pages
+RewriteRule ^(includes|tools|docs)/ - [F,L]
+
+# Image variants: /img/{assetId}/{width} creates the resized WebP copy once, then redirects to it
+RewriteRule ^img/([A-Za-z0-9]+)/([0-9]+)/?$ img.php?id=$1&w=$2 [L]
+
+# No favicon.ico file: answer cheaply instead of rendering the PHP 404 page
+RewriteRule ^favicon\.ico$ - [R=404,L]
+
+# Serve existing files and directories as-is
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Sitemap
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# Route: /{locale}/ → Homepage
+RewriteRule ^(fa|tr|en)/?$ page-home.php?locale=$1 [L]
+
+# Route: /{locale}/category/{slug} → Category page
+RewriteRule ^(fa|tr|en)/category/([a-z0-9-]+)/?$ page-category.php?locale=$1&slug=$2 [L]
+
+# Route: /{locale}/project/([a-z0-9-]+) → Project detail page
+RewriteRule ^(fa|tr|en)/project/([a-z0-9-]+)/?$ page-project.php?locale=$1&slug=$2 [L]
+
+# Root → redirect to the preferred locale
+RewriteRule ^$ index.php [L]
+
+# Fallback 404
+RewriteRule ^ page-404.php [L]
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Static site assets: CSS/JS are cache-busted with ?v=, fonts and flags never change
+    <If "%{REQUEST_URI} =~ m#^/assets/#">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </If>
+</IfModule>

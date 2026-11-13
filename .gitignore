@@ -1,0 +1,36 @@
+# Cockpit / Vorud temporary & cache files
+vorud/storage/tmp/*
+vorud/storage/cache/*
+vorud/storage/logs/*
+vorud/storage/uploads/_v/*
+!vorud/storage/tmp/.gitkeep
+!vorud/storage/cache/.gitkeep
+!vorud/storage/logs/.gitkeep
+!vorud/storage/uploads/_v/.gitkeep
+
+# SQLite database & secret files
+vorud/storage/data/*.sqlite
+vorud/storage/data/*.sqlite-shm
+vorud/storage/data/*.sqlite-wal
+vorud/storage/data/*.sqlite-journal
+vorud/storage/data/.sec-key
+vorud/storage/data/.deploy-token
+vorud/.env
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+
+# graphify
+graphify-out/
+.graphify*
+!.graphifyignore
+
+# Build artifacts
+*.zip

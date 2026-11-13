@@ -1,0 +1,202 @@
+<?php
+
+namespace Updater\Helper;
+
+class Updater extends \Lime\Helper {
+
+    protected ?string $releasesUrl = null;
+
+    protected function initialize() {
+
+        $this->releasesUrl = \rtrim($this->app->retrieve('updater/releasesUrl', 'https://files.getcockpit.com/releases'), '/');
+    }
+
+    /**
+     * Log an updater event.
+     *
+     * @param string $message The log message.
+     * @param string $type The log type (info, warning, error).
+     * @param array|null $context Additional context data.
+     */
+    protected function log(string $message, string $type = 'info', ?array $context = null): void {
+        $this->app->module('system')->log($message, 'updater', $type, $context);
+    }
+
+    /**
+     * Update Cockpit to a specific version.
+     *
+     * @param string $version The version to update to (default: 'master').
+     * @param string $target The target type ('core' or 'pro', default: 'core').
+     * @return bool True on success, false on failure.
+     */
+    public function update(string $version = 'master', string $target = 'core'): bool {
+
+        if (!\in_array($target, ['core', 'pro'])) {
+            $target = 'core';
+        }
+
+        $zipUrl = "{$this->releasesUrl}/{$version}/cockpit-{$target}.zip";
+
+        $context = [
+            'version' => $version,
+            'target' => $target,
+            'from_version' => APP_VERSION,
+            'php_version' => PHP_VERSION,
+        ];
+
+        $this->log("Starting update to {$version} [{$target}] from " . APP_VERSION, 'info', $context);
+
+        try {
+            $this->process($zipUrl, "cockpit-{$target}");
+            $this->log("Update to {$version} [{$target}] completed successfully", 'info', $context);
+        } catch (\Exception $e) {
+            $context['error'] = $e->getMessage();
+            $this->log("Update to {$version} [{$target}] failed: {$e->getMessage()}", 'error', $context);
+            throw $e;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the latest release information.
+     *
+     * @return array The latest release information.
+     */
+    public function getLatestReleaseInfo() {
+
+        $url = "{$this->releasesUrl}/latest.json";
+        $contents = $this->app->helper('utils')->urlGetContents($url);
+
+        if (!$contents) {
+
+            $meta = [
+                'version' => APP_VERSION,
+                'date' => \date('Y-m-d'),
+                'php' => [
+                    'min' => PHP_VERSION,
+                ],
+            ];
+
+        } else {
+            $meta = \json_decode($contents, true);
+        }
+
+        $meta['notices'] = [];
+        $meta['isNewVersionAvailable'] = \version_compare($meta['version'] ?? APP_VERSION, APP_VERSION, '>');
+
+        if (isset($meta['php']['min']) && \version_compare(PHP_VERSION, $meta['php']['min'], '<')) {
+            $meta['notices'][] = 'Your PHP version is too low';
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Process the update.
+     *
+     * @param string $zipUrl The URL of the zip file.
+     * @param string $zipRoot The root directory inside the zip file.
+     * @return bool True on success, false on failure.
+     */
+    protected function process(string $zipUrl, string $zipRoot = '/'): bool {
+
+        if (!\is_writable(APP_DIR)) {
+            throw new \Exception("App root is not writable!");
+        }
+
+        $targetPath = APP_DIR;
+
+        $fs = $this->app->helper('fs');
+        $tempPath = $this->app->path('#tmp:');
+        $zipRoot = \trim($zipRoot, '/');
+
+        // download
+        $zipname = \basename($zipUrl);
+
+        $this->log("Downloading update package from {$zipUrl}");
+
+        if (!\file_put_contents("{$tempPath}/{$zipname}", $this->app->helper('utils')->urlGetContents($zipUrl))) {
+            throw new \Exception("Couldn't download {$zipUrl}!");
+        }
+
+        $this->log("Download complete, extracting package");
+
+        // extract zip contents
+        if (!\is_dir("{$tempPath}/update-{$zipname}")) {
+            @\mkdir("{$tempPath}/update-{$zipname}", 0755);
+        }
+
+        $zip = new \ZipArchive;
+
+        if ($zip->open("{$tempPath}/{$zipname}") === true) {
+
+            if (!$zip->extractTo("{$tempPath}/update-{$zipname}")) {
+                throw new \Exception('Extracting zip file failed!');
+            }
+
+            $zip->close();
+
+        } else {
+            throw new \Exception('Open zip file failed!');
+        }
+
+        $this->log("Package extracted, verifying PHP compatibility");
+
+        // check compatible php version
+        $composerContents = \json_decode(\file_get_contents("{$tempPath}/update-{$zipname}/{$zipRoot}/composer.json"), true);
+        $requiredPhpVersion = \str_replace('^', '', $composerContents['require']['php']);
+
+        if (\version_compare(PHP_VERSION, $requiredPhpVersion, '<')) {
+
+            // cleanup
+            $fs->delete("{$tempPath}/{$zipname}");
+            $fs->delete("{$tempPath}/update-{$zipname}");
+
+            throw new \Exception("Your PHP version is not compatible with this update! PHP version {$requiredPhpVersion} or higher is required.");
+        }
+
+        $this->log("PHP compatibility verified (required: {$requiredPhpVersion}, current: " . PHP_VERSION . "), installing files");
+
+        $fs->delete("{$tempPath}/update-{$zipname}/{$zipRoot}/config");
+        $fs->delete("{$tempPath}/update-{$zipname}/{$zipRoot}/storage");
+
+        // copy files
+        $fs->copy("{$tempPath}/update-{$zipname}/{$zipRoot}", $targetPath);
+
+        $this->log("Files installed, cleaning up");
+
+        // cleanup
+        $fs->delete("{$tempPath}/{$zipname}");
+        $fs->delete("{$tempPath}/update-{$zipname}");
+
+        // delete modules cache
+        $cache = ['#cache:modules.cache.php'];
+
+        // delete modules cache for all spaces
+        $spaces = $this->app->helper('spaces')->spaces();
+
+        foreach ($spaces as $space) {
+            $cache[] = APP_SPACES_DIR."/{$space['name']}/storage/cache/modules.cache.php";
+        }
+
+        $cacheCleared = 0;
+
+        foreach ($cache as $file) {
+            if ($this->app->path($file)) {
+                $fs->delete($file);
+                $cacheCleared++;
+            }
+        }
+
+        // clear opcache
+        if (\function_exists('opcache_reset')) {
+            \opcache_reset();
+            $this->log("Caches cleared ({$cacheCleared} module caches, opcache reset)");
+        } else {
+            $this->log("Caches cleared ({$cacheCleared} module caches)");
+        }
+
+        return true;
+    }
+}

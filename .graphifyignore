@@ -1,0 +1,23 @@
+# Upstream Cockpit CMS (vendor code) — only the project's addons and config are graphed
+vorud/lib/
+vorud/modules/
+vorud/storage/
+vorud/install/
+vorud/AGENTS.md
+vorud/CHANGELOG.md
+vorud/README.md
+vorud/SECURITY.md
+vorud/bootstrap.php
+vorud/composer.json
+vorud/package.json
+vorud/cron.php
+vorud/index.php
+vorud/favicon.png
+vorud/robots.txt
+vorud/tower
+
+# Tooling, generated output and design references
+.agents/
+.claude/
+graphify-out/
+reference/

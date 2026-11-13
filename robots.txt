@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amordad.backends.ir/sitemap.xml

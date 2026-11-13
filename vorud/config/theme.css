@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Amordad Architecture Studio — Cockpit CMS Custom Theme & RTL Styles
+   ========================================================================== */
+
+/* Load Vazirmatn variable font for Persian fields */
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('/assets/fonts/Vazirmatn-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ────────────── Persian Fields (RTL) ────────────── */
+
+/* Persian Field Containers */
+app-fieldcontainer[id$="_fa"],
+app-fieldcontainer[id*="-fa-"],
+app-fieldcontainer[data-rtl="true"] {
+    /* Subtle visual separation for clarity if desired */
+}
+
+/* Persian Inputs and Textareas */
+app-fieldcontainer[id$="_fa"] input.kiss-input,
+app-fieldcontainer[id$="_fa"] textarea.kiss-textarea,
+app-fieldcontainer[id$="_fa"] [field="text"] input,
+app-fieldcontainer[id$="_fa"] [field="text"] textarea,
+app-fieldcontainer[id*="-fa-"] input.kiss-input,
+app-fieldcontainer[id*="-fa-"] textarea.kiss-textarea,
+input[data-rtl="true"],
+textarea[data-rtl="true"] {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif !important;
+    font-size: 0.95rem;
+}
+
+/* Persian Placeholders */
+app-fieldcontainer[id$="_fa"] input::placeholder,
+app-fieldcontainer[id$="_fa"] textarea::placeholder,
+input[data-rtl="true"]::placeholder,
+textarea[data-rtl="true"]::placeholder {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* Persian Rich Text (TipTap / ProseMirror WYSIWYG) */
+app-fieldcontainer[id$="_fa"] .editor-container,
+app-fieldcontainer[id$="_fa"] .tiptap-content-wrapper,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror,
+app-fieldcontainer[id$="_fa"] .ProseMirror,
+app-fieldcontainer[id*="-fa-"] .tiptap.ProseMirror,
+.tiptap.ProseMirror[data-rtl="true"],
+.ProseMirror[data-rtl="true"] {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif !important;
+    font-size: 0.95rem;
+    line-height: 1.85 !important;
+}
+
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror p,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror h1,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror h2,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror h3,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror h4,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror blockquote,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror table,
+.tiptap.ProseMirror[data-rtl="true"] p,
+.tiptap.ProseMirror[data-rtl="true"] h1,
+.tiptap.ProseMirror[data-rtl="true"] h2,
+.tiptap.ProseMirror[data-rtl="true"] h3,
+.tiptap.ProseMirror[data-rtl="true"] blockquote {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* Lists in Persian Rich Text */
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror ul,
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror ol,
+.tiptap.ProseMirror[data-rtl="true"] ul,
+.tiptap.ProseMirror[data-rtl="true"] ol {
+    direction: rtl !important;
+    text-align: right !important;
+    padding-right: 1.75rem !important;
+    padding-left: 0 !important;
+}
+
+/* Blockquotes in Persian Rich Text */
+app-fieldcontainer[id$="_fa"] .tiptap.ProseMirror blockquote,
+.tiptap.ProseMirror[data-rtl="true"] blockquote {
+    border-right: 3px solid #000 !important;
+    border-left: none !important;
+    padding-right: 1rem !important;
+    padding-left: 0 !important;
+}
+
+/* Keep formatting toolbars in standard LTR layout */
+app-fieldcontainer[id$="_fa"] menu-bar,
+app-fieldcontainer[id$="_fa"] .tiptap-menu-bar,
+app-fieldcontainer[id$="_fa"] bubble-menu,
+app-fieldcontainer[id$="_fa"] floating-menu,
+app-fieldcontainer[id$="_fa"] .kiss-card.kiss-button-group {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
+/* ────────────── English & Turkish Fields (Strict LTR) ────────────── */
+
+app-fieldcontainer[id$="_en"] input,
+app-fieldcontainer[id$="_en"] textarea,
+app-fieldcontainer[id$="_en"] .tiptap.ProseMirror,
+app-fieldcontainer[id$="_en"] .ProseMirror,
+app-fieldcontainer[id$="_tr"] input,
+app-fieldcontainer[id$="_tr"] textarea,
+app-fieldcontainer[id$="_tr"] .tiptap.ProseMirror,
+app-fieldcontainer[id$="_tr"] .ProseMirror,
+app-fieldcontainer[id$="slug"] input,
+[data-rtl="false"] {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
+app-fieldcontainer[id$="_en"] .tiptap.ProseMirror p,
+app-fieldcontainer[id$="_en"] .tiptap.ProseMirror ul,
+app-fieldcontainer[id$="_en"] .tiptap.ProseMirror ol,
+app-fieldcontainer[id$="_tr"] .tiptap.ProseMirror p,
+app-fieldcontainer[id$="_tr"] .tiptap.ProseMirror ul,
+app-fieldcontainer[id$="_tr"] .tiptap.ProseMirror ol {
+    direction: ltr !important;
+    text-align: left !important;
+    padding-left: 1.5rem !important;
+    padding-right: 0 !important;
+}

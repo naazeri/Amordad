@@ -1,0 +1,23 @@
+[31-Oct-2026 07:16:06 UTC] PHP Warning:  Trying to access array offset on int in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[31-Oct-2026 07:30:16 UTC] PHP Warning:  Trying to access array offset on int in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[31-Oct-2026 07:30:20 UTC] PHP Warning:  Trying to access array offset on int in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[31-Oct-2026 07:30:20 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[31-Oct-2026 07:30:20 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[31-Oct-2026 07:30:20 UTC] PHP Warning:  include(): Failed opening '/home/h355112/amordad/vorud/storage/cache/modules.cache.php' for inclusion (include_path='.:/opt/alt/php85/usr/share/pear:/opt/alt/php85/usr/share/php:/usr/share/pear:/usr/share/php') in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[31-Oct-2026 07:30:20 UTC] PHP Warning:  Trying to access array offset on false in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[01-Nov-2026 18:36:49 UTC] PHP Warning:  Trying to access array offset on int in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[01-Nov-2026 18:37:39 UTC] PHP Warning:  Trying to access array offset on int in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[01-Nov-2026 18:53:05 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:07:53 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:07:53 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:07:53 UTC] PHP Warning:  include(): Failed opening '/home/h355112/amordad/vorud/storage/cache/modules.cache.php' for inclusion (include_path='.:/opt/alt/php85/usr/share/pear:/opt/alt/php85/usr/share/php:/usr/share/pear:/usr/share/php') in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:07:53 UTC] PHP Warning:  Trying to access array offset on false in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[03-Nov-2026 16:08:26 UTC] PHP Warning:  Trying to access array offset on int in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[03-Nov-2026 16:08:26 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:08:26 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:08:26 UTC] PHP Warning:  include(): Failed opening '/home/h355112/amordad/vorud/storage/cache/modules.cache.php' for inclusion (include_path='.:/opt/alt/php85/usr/share/pear:/opt/alt/php85/usr/share/php:/usr/share/pear:/usr/share/php') in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:08:26 UTC] PHP Warning:  Trying to access array offset on false in /home/h355112/amordad/vorud/bootstrap.php on line 382
+[03-Nov-2026 16:08:30 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:08:30 UTC] PHP Warning:  include(/home/h355112/amordad/vorud/storage/cache/modules.cache.php): Failed to open stream: No such file or directory in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:08:30 UTC] PHP Warning:  include(): Failed opening '/home/h355112/amordad/vorud/storage/cache/modules.cache.php' for inclusion (include_path='.:/opt/alt/php85/usr/share/pear:/opt/alt/php85/usr/share/php:/usr/share/pear:/usr/share/php') in /home/h355112/amordad/vorud/bootstrap.php on line 380
+[03-Nov-2026 16:08:30 UTC] PHP Warning:  Trying to access array offset on false in /home/h355112/amordad/vorud/bootstrap.php on line 382
